@@ -17,25 +17,26 @@ import { IdParamDto } from './dto/idParam.dto';
 import { ParseIdPipe } from './pipes/parseIdPipe';
 import { HeadersDto } from './dto/headers.dto';
 import { RequestHeader } from './pipes/request-headers';
+import { PropertyService } from './property.service';
 
 @Controller('property')
 export class PropertyController {
+  constructor(private propertyService: PropertyService) {}
+
   @Get()
   findAll() {
-    return 'All properties';
+    return this.propertyService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id, @Query('sort', ParseBoolPipe) sort) {
-    console.log(typeof id);
-    console.log(typeof sort);
-    return id as number;
+    return this.propertyService.findOne();
   }
 
   @Post()
   @HttpCode(202)
   cretate(@Body() body: CreatePropertyDto) {
-    return body;
+    return this.propertyService.create();
   }
 
   @Patch(':id')
@@ -45,8 +46,8 @@ export class PropertyController {
     @Param('id', ParseIdPipe) id,
     @Body()
     body: CreatePropertyDto,
-    @RequestHeader(HeadersDto) headers: HeadersDto,
+    // @RequestHeader(HeadersDto) headers: HeadersDto,
   ) {
-    return headers;
+    return this.propertyService.update();
   }
 }
