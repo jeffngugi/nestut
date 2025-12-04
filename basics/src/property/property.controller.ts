@@ -18,6 +18,7 @@ import { ParseIdPipe } from './pipes/parseIdPipe';
 import { HeadersDto } from './dto/headers.dto';
 import { RequestHeader } from './pipes/request-headers';
 import { PropertyService } from './property.service';
+import { UpdatePropertyDto } from './dto/updatePropertyDto';
 
 @Controller('property')
 export class PropertyController {
@@ -29,25 +30,28 @@ export class PropertyController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id, @Query('sort', ParseBoolPipe) sort) {
-    return this.propertyService.findOne();
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('sort', ParseBoolPipe) sort,
+  ) {
+    return this.propertyService.findOne(id);
   }
 
   @Post()
   @HttpCode(202)
-  cretate(@Body() body: CreatePropertyDto) {
-    return this.propertyService.create();
+  cretate(@Body() dto: CreatePropertyDto) {
+    return this.propertyService.create(dto);
   }
 
   @Patch(':id')
   @HttpCode(202)
   update(
     // @Param() param: IdParamDto,
-    @Param('id', ParseIdPipe) id,
+    @Param('id', ParseIdPipe) id: number,
     @Body()
-    body: CreatePropertyDto,
+    dto: UpdatePropertyDto,
     // @RequestHeader(HeadersDto) headers: HeadersDto,
   ) {
-    return this.propertyService.update();
+    return this.propertyService.update(id, dto);
   }
 }

@@ -1,20 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Property } from 'src/entities/property.entity';
+import { Repository } from 'typeorm';
+import { CreatePropertyDto } from './dto/createProperty.dto';
+import { UpdatePropertyDto } from './dto/updatePropertyDto';
 
 @Injectable()
 export class PropertyService {
-  findAll() {
-    return 'This will give all properties';
+  constructor(
+    @InjectRepository(Property) private propertyRepo: Repository<Property>,
+  ) {}
+
+  async findAll() {
+    return await this.propertyRepo.find();
   }
 
-  findOne() {
-    return 'This will return one property';
+  async findOne(id: number) {
+    const property = await this.propertyRepo.findOne({
+      where: {
+        id,
+      },
+    });
+    if (!property) throw new NotFoundException();
+    return property;
   }
 
-  create() {
-    return 'This will create a property';
+  async create(dto: CreatePropertyDto) {
+    return await this.propertyRepo.save(dto);
   }
 
-  update() {
-    return 'This wil update a property';
+  async update(id: number, dto: UpdatePropertyDto) {
+    return await this.propertyRepo.update({ id }, dto);
   }
 }
