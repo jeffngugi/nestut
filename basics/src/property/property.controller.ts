@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Headers,
   HttpCode,
@@ -53,5 +54,10 @@ export class PropertyController {
     // @RequestHeader(HeadersDto) headers: HeadersDto,
   ) {
     return this.propertyService.update(id, dto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id', ParseIdPipe) id: number) {
+    return this.propertyService.delete(id);
   }
 }
