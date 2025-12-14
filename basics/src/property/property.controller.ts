@@ -6,34 +6,35 @@ import {
   Headers,
   HttpCode,
   Param,
-  ParseBoolPipe,
+  // ParseBoolPipe,
   ParseIntPipe,
   Patch,
   Post,
   Query,
-  ValidationPipe,
+  // ValidationPipe,
 } from '@nestjs/common';
 import { CreatePropertyDto } from './dto/createProperty.dto';
-import { IdParamDto } from './dto/idParam.dto';
+// import { IdParamDto } from './dto/idParam.dto';
 import { ParseIdPipe } from './pipes/parseIdPipe';
-import { HeadersDto } from './dto/headers.dto';
-import { RequestHeader } from './pipes/request-headers';
+// import { HeadersDto } from './dto/headers.dto';
+// import { RequestHeader } from './pipes/request-headers';
 import { PropertyService } from './property.service';
 import { UpdatePropertyDto } from './dto/updatePropertyDto';
+import { PaginationDTO } from './dto/pagination.dto';
 
 @Controller('property')
 export class PropertyController {
   constructor(private propertyService: PropertyService) {}
 
   @Get()
-  findAll() {
-    return this.propertyService.findAll();
+  findAll(@Query() paginationDTO: PaginationDTO) {
+    return this.propertyService.findAll(paginationDTO);
   }
 
   @Get(':id')
   findOne(
     @Param('id', ParseIntPipe) id: number,
-    @Query('sort', ParseBoolPipe) sort,
+    // @Query('sort', new ParseBoolPipe({ optional: true })) sort?: boolean,
   ) {
     return this.propertyService.findOne(id);
   }
